@@ -61,7 +61,7 @@ function Dashboard() {
     const inputMonthStart = 3;
     const inputMonthEnd = 8;
     
-    let monthsArray = [];
+    // let monthsArray = [];
     let daysArray = [];
     
     const monthSpan = sliceMonthSpan(inputMonthStart, inputMonthEnd);

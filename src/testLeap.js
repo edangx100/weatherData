@@ -53,7 +53,7 @@ const inputYear = 2020;
 const inputMonthStart = 2;
 const inputMonthEnd = 8;
 
-let monthsArray = [];
+// let monthsArray = [];
 let daysArray = [];
 
 const monthSpan = sliceMonthSpan(inputMonthStart, inputMonthEnd);
