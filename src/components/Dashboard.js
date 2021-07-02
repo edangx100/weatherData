@@ -31,7 +31,7 @@ function Dashboard() {
             console.log( data );
 
 
-            
+
 
             for ( const object of data ) {
               const temprArray = object.items[0].readings;
@@ -47,7 +47,7 @@ function Dashboard() {
             console.log(error);
         });
 
-        console.log( "tempList Length " + tempList.length );
+        // console.log( "tempList Length " + tempList.length );
     
       }, []);
 
