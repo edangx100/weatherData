@@ -47,7 +47,7 @@ function Dashboard() {
             console.log(error);
         });
 
-        // console.log( "tempList Length " + tempList.length );
+        console.log( "tempList Length " + tempList.length );
     
       }, []);
 
