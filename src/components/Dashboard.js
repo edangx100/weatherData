@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import TempRow from "./TempRow"
 
 // const hours = ["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];
-const hours = ["00","01","02"];
+
 
 function Dashboard() {
 
@@ -30,8 +30,8 @@ function Dashboard() {
         .then((data) => {
             console.log( data );
 
-            const temprArray = data[0].items[0].readings;
-            const temprObj = temprArray.find(element => element.station_id === stationID );
+
+            
 
             for ( const object of data ) {
               const temprArray = object.items[0].readings;
