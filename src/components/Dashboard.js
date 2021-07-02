@@ -85,8 +85,9 @@ function Dashboard() {
             console.log(error);
         });
 
-        console.log( "tempList Length? " + tempList.length );
-    
+        // console.log( "tempList Length? " + tempList.length );
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
 
 
