@@ -14,7 +14,7 @@ function Home() {
       <h1>Home Page</h1>
 
       <h3>Choose weather station</h3>
-      <img src="https://raw.githubusercontent.com/edangx100/APITest/main/public/sg_map.png" />
+      <img src="https://raw.githubusercontent.com/edangx100/APITest/main/public/sg_map.png" alt="singapore map"/>
 
       <h3>Choose year and month for historic weather data extract from data.gov.sg</h3>
 
