@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 // import { Link } from "react-router-dom";
 import TempRow from "./TempRow"
 
+import { Row, Col } from 'react-bootstrap';
+import './Dashboard.css';
+import LineChart from "./LineChart"
+
 
 const MONTHS = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
 const DAYS28 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28"]
@@ -129,7 +133,7 @@ function Dashboard() {
 
   return (
     <>
-    <h1>Historic Temperature Readings</h1>
+    {/* <h1>Historic Temperature Readings</h1>
     
     <table>
       <tr>
@@ -137,7 +141,31 @@ function Dashboard() {
         <th>Temperature value</th>
       </tr>
       {tempList}
-    </table>
+    </table> */}
+
+
+    <Row className="app-container">
+        <Col md={6} id='todo_container'>
+
+            <h1>Historic Temperature Readings</h1>
+            
+            <table>
+            <tr>
+                <th>Time</th>
+                <th>Temperature value</th>
+            </tr>
+            {/* {tempList} */}
+            </table>
+
+        </Col>
+
+        <Col>
+            <div className='chart'>
+                chart here
+                <LineChart />
+            </div>
+        </Col>
+    </Row>
 
   </>
   );

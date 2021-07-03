@@ -1,4 +1,4 @@
-import React, {Link} from "react"; 
+import React from "react"; 
 import { useHistory } from "react-router-dom";
 
 function Home() {
@@ -12,6 +12,9 @@ function Home() {
   return (
     <>
       <h1>Home Page</h1>
+
+      <h3>Choose weather station</h3>
+      <img src="https://raw.githubusercontent.com/edangx100/APITest/main/public/sg_map.png" />
 
       <h3>Choose year and month for historic weather data extract from data.gov.sg</h3>
 
