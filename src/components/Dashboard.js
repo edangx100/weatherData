@@ -8,8 +8,8 @@ const DAYS28 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"
 const DAYS29 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"]
 const DAYS30 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30" ]
 const DAYS31 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" ]
-const HOURS = ["00","01","02"];
-// const HOURS = ["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];
+// const HOURS = ["00","01","02"];
+const HOURS = ["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];
 
 
 function determineDaysInMonth ( year, month ) {
@@ -59,7 +59,7 @@ function Dashboard() {
         
     const inputYear = 2020;
     const inputMonthStart = 3;
-    const inputMonthEnd = 8;
+    const inputMonthEnd = 3;
     
     // let monthsArray = [];
     let daysArray = [];
@@ -76,11 +76,6 @@ function Dashboard() {
     useEffect(() => {
 
         const fetchList = [];
-
-        // for ( const day of daysArray )
-        //   for ( const hour of HOURS ) {
-        //       fetchList.push( fetch(`https://api.data.gov.sg/v1/environment/air-temperature?date_time=2020-02-${day}T${hour}%3A00%3A00`) );
-        //   }
 
         // Push by month
         for ( const month of monthSpan )
@@ -134,8 +129,8 @@ function Dashboard() {
 
   return (
     <>
-      <h1>Dashboard Page</h1>
-
+    <h1>Historic Temperature Readings</h1>
+    
     <table>
       <tr>
         <th>Time</th>
