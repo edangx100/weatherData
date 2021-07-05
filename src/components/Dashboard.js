@@ -258,7 +258,7 @@ function Dashboard(props) {
 
             <h4>Weather Station ID: {stationID}</h4>
             <h4>Number of Missing records for Temperature): {missCount_Temperature}</h4>
-            <h4>Number of Missing records for Wind Speed): {missCount_Windspeed}</h4>
+            {/* <h4>Number of Missing records for Wind Speed): {missCount_Windspeed}</h4> */}
 
             <button onClick={ ()=>downloadCSV(tempList, "temperature") }>Download Temperature</button>
 
@@ -274,7 +274,7 @@ function Dashboard(props) {
 
             <div className='chart'>
                 {/* Wind Speed */}
-                <LineChart dataList={windspeedList} type={"windspeed"} />
+                {/* <LineChart dataList={windspeedList} type={"windspeed"} /> */}
             </div>
         </Col>
     </Row>
