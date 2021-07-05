@@ -1,18 +1,47 @@
-import React from "react";
+import React, {useState, createContext} from "react";
 import { Route } from "react-router-dom"
 import Home from "./Home"
 import Dashboard from "./Dashboard"
 import About from "./About"
 
-function Main() {
+export const DataContext = createContext()
+
+function Main(props) {
+
+  const [station, setStation] = useState();
+  const [year, setYear] = useState();
+  const [month, setMonth] = useState();
+
+  const prop_object = {
+    station: station,
+    setStation: setStation,
+    year: year,
+    setYear: setYear,
+    month: month,
+    setMonth: setMonth
+  }
+
 
   return (
     <main>
 
-        <Route exact path="/" component={Home} />
+      <DataContext.Provider value={prop_object} >
+
+        {/* <Route exact path="/" component={Home} /> */}
+        <Route exact path="/">
+          <Home />
+        </Route>
+
+
         <Route path="/about" component={About} />
-        <Route exact path="/weathers" component={Dashboard} />
-        {/* <Route path="/stocks/:stockSymbol" component={Stock} /> */}
+
+
+        {/* <Route exact path="/weathers" component={Dashboard} /> */}
+        <Route path="/weathers">
+          <Dashboard />
+        </Route>
+
+      </DataContext.Provider>
 
     </main>
   )

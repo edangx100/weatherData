@@ -1,9 +1,21 @@
-.app-container, html, body, #root {
+
+/* .app-container, html, body, #root  */
+
+.app-container {
 	height: 100%;
     /* height: 1000px; */
     /* color: white; */
+  
+  display: flex;
+  justify-content: center;
   }
 
   #todo_container {
 	  background: rgb(87, 160, 170);
   }
+
+
+.chart {
+  width: 650px
+  /* width: 100% */
+}

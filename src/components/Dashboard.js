@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 // import { Link } from "react-router-dom";
-import TempRow from "./TempRow"
+// import TempRow from "./TempRow"
 
 import { Row, Col } from 'react-bootstrap';
 import './Dashboard.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import LineChart from "./LineChart"
+
+import { DataContext } from './Main'
 
 
 const MONTHS = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
@@ -12,8 +15,8 @@ const DAYS28 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"
 const DAYS29 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"]
 const DAYS30 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30" ]
 const DAYS31 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" ]
-// const HOURS = ["00","01","02"];
-const HOURS = ["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];
+const HOURS = ["00","01","02"];
+// const HOURS = ["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];
 
 
 function determineDaysInMonth ( year, month ) {
@@ -54,16 +57,54 @@ function sliceMonthSpan ( monthStart, monthEnd ) {
     return MONTHS.slice( monthStart-1, monthEnd );
 }
 
+
+function downloadCSV (tempList, type) {
+
+    const csvString_Temperature = [
+        [
+          "Time",
+          "Temperature"
+        ],
+        ...tempList.map(item => [
+          item.hour,
+          item.value
+        ])
+      ].map(e => e.join(",")) 
+      .join("\n");
+
+
+    const downloadLink = document.createElement("a");
+    const blob = new Blob(["\ufeff", csvString_Temperature]);
+    const url = URL.createObjectURL(blob);
+    downloadLink.href = url;
+    downloadLink.download = `data_${type}.csv`;
+
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
+}
+
 // ============================================================
-function Dashboard() {
+function Dashboard(props) {
 
     const [tempList, setTempList] = useState([]);
+    const [missCount_Temperature, setMissCount_Temperature] = useState(0);
+    const [windspeedList, setWindspeedList] = useState([]);
+    const [missCount_Windspeed, setMissCount_Windspeed] = useState(0);
 
-    const stationID = "S24";   // Changi
+    const [csvTemperature, setCsvTemperature] = useState();
+
+    const dataContext = useContext(DataContext)
+
+
+
+    // const stationID = "S24";   // Changi
+    const stationID = dataContext.station;  
+
         
-    const inputYear = 2020;
-    const inputMonthStart = 3;
-    const inputMonthEnd = 3;
+    const inputYear = dataContext.year;
+    const inputMonthStart = dataContext.month;
+    const inputMonthEnd = dataContext.month;
     
     // let monthsArray = [];
     let daysArray = [];
@@ -79,16 +120,19 @@ function Dashboard() {
 
     useEffect(() => {
 
-        const fetchList = [];
+        //========= TEMPERATURE ==========//
+        const fetchList_Temperature = [];
 
         // Push by month
         for ( const month of monthSpan )
           for ( const day of daysArray )
             for ( const hour of HOURS ) {
-                fetchList.push( fetch(`https://api.data.gov.sg/v1/environment/air-temperature?date_time=2020-${month}-${day}T${hour}%3A00%3A00`) );
+                // fetchList.push( fetch(`https://api.data.gov.sg/v1/environment/air-temperature?date_time=2020-${month}-${day}T${hour}%3A15%3A00`) );
+                fetchList_Temperature.push( fetch(`https://api.data.gov.sg/v1/environment/air-temperature?date_time=${inputYear}-${month}-${day}T${hour}%3A05%3A00`) );
+                // console.log( `https://api.data.gov.sg/v1/environment/air-temperature?date_time=${inputYear}-${month}-${day}T${hour}%3A15%3A00` )
             }
 
-        Promise.all(fetchList)
+        Promise.all(fetchList_Temperature)
         .then((responses) => {
             return Promise.all(
                 responses.map((response) => {
@@ -108,10 +152,16 @@ function Dashboard() {
                 temprArray = object.items[0].readings;
                 temprObj = temprArray.find(element => element.station_id === stationID );
 
-                console.log( "time " + object.items[0].timestamp);
-                console.log( "temperature " + temprObj.value);
+                // console.log( "time " + object.items[0].timestamp);
+                // console.log( "temperature " + temprObj.value);
+                
 
-                setTempList( tempList =>[...tempList, <TempRow hour={object.items[0].timestamp} temperature={temprObj.value} />] ); 
+                // setTempList( tempList =>[...tempList, <TempRow hour={object.items[0].timestamp} temperature={temprObj.value} />] ); 
+                const newObj = {  
+                    hour: object.items[0].timestamp,
+                    value: temprObj.value 
+                }
+                setTempList( tempList =>[...tempList, newObj ] );
               }
               catch {
                 console.log( "Missing object");
@@ -119,12 +169,70 @@ function Dashboard() {
               }
             }
             console.log("Missing: " + missing );
+            setMissCount_Temperature(missing);
         })
         .catch((error) => {
             console.log(error);
         });
 
-        console.log( "tempList Length? " + tempList.length );
+        // console.log( "tempList Length? " + tempList.length );
+
+        //========= WIND SPEED ==========//
+        // const fetchList_Windspeed = [];
+
+        // // Push by month
+        // for ( const month of monthSpan )
+        //   for ( const day of daysArray )
+        //     for ( const hour of HOURS ) {
+        //         fetchList_Windspeed.push( fetch(`https://api.data.gov.sg/v1/environment/wind-speed?date_time=${inputYear}-${month}-${day}T${hour}%3A05%3A00`) );
+        //     }
+
+        // Promise.all(fetchList_Windspeed)
+        // .then((responses) => {
+        //     return Promise.all(
+        //         responses.map((response) => {
+        //             return response.json();
+        //     })
+        //     );
+        // })
+        // .then((data) => {
+        //     console.log( data );
+
+        //     let missing = 0;
+        //     for ( const object of data ) {
+        //       let windspeedArray;
+        //       let windspeedObj;
+
+        //       try{
+        //         windspeedArray = object.items[0].readings;
+        //         windspeedObj = windspeedArray.find(element => element.station_id === stationID );
+
+        //         console.log( "time " + object.items[0].timestamp);
+        //         console.log( "wind speed " + windspeedObj.value);
+                
+
+        //         const newObj = {  
+        //             hour: object.items[0].timestamp,
+        //             value: windspeedObj.value 
+        //         }
+        //         setWindspeedList( windspeedList =>[...windspeedList, newObj ] );
+        //       }
+        //       catch {
+        //         console.log( "Missing object");
+        //         missing += 1;
+        //       }
+        //     }
+        //     console.log("Missing: " + missing );
+        //     setMissCount_Windspeed(missing);
+        // })
+        // .catch((error) => {
+        //     console.log(error);
+        // });
+
+        // =================================//
+
+
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
       }, []);
 
@@ -147,22 +255,27 @@ function Dashboard() {
     <Row className="app-container">
         <Col md={6} id='todo_container'>
 
-            <h1>Historic Temperature Readings</h1>
-            
-            <table>
-            <tr>
-                <th>Time</th>
-                <th>Temperature value</th>
-            </tr>
-            {/* {tempList} */}
-            </table>
+            <h1>Historic Weather Readings</h1>
+
+            <h4>Weather Station ID: {stationID}</h4>
+            <h4>Number of Missing records for Temperature): {missCount_Temperature}</h4>
+            <h4>Number of Missing records for Wind Speed): {missCount_Windspeed}</h4>
+
+            <button onClick={ ()=>downloadCSV(tempList, "temperature") }>Download Temperature</button>
 
         </Col>
 
         <Col>
             <div className='chart'>
-                chart here
-                <LineChart />
+                {/* Temperature  */}
+                <LineChart dataList={tempList} type={"temperature"} />
+            </div>
+
+            <br></br>
+
+            <div className='chart'>
+                {/* Wind Speed */}
+                <LineChart dataList={windspeedList} type={"windspeed"} />
             </div>
         </Col>
     </Row>
