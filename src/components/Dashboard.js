@@ -89,16 +89,15 @@ function Dashboard(props) {
 
     const [tempList, setTempList] = useState([]);
     const [missCount_Temperature, setMissCount_Temperature] = useState(0);
-    const [windspeedList, setWindspeedList] = useState([]);
-    const [missCount_Windspeed, setMissCount_Windspeed] = useState(0);
+    // const [windspeedList, setWindspeedList] = useState([]);
+    // const [missCount_Windspeed, setMissCount_Windspeed] = useState(0);
 
-    const [csvTemperature, setCsvTemperature] = useState();
+    // const [csvTemperature, setCsvTemperature] = useState();
 
     const dataContext = useContext(DataContext)
 
 
 
-    // const stationID = "S24";   // Changi
     const stationID = dataContext.station;  
 
         

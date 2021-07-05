@@ -1,5 +1,5 @@
 import React, {useContext} from "react"; 
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { DataContext } from './Main'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -36,7 +36,7 @@ function Home() {
       <h3>Weather stations location</h3>
       {/* <img src="https://raw.githubusercontent.com/edangx100/APITest/main/public/sg_map_annotated.JPG" alt="singapore map"/> */}
 
-      <img src="https://raw.githubusercontent.com/edangx100/APITest/main/public/sg_map_annotatedv2.JPG" usemap="#image-map" />
+      <img src="https://raw.githubusercontent.com/edangx100/APITest/main/public/sg_map_annotatedv2.JPG" usemap="#image-map" alt="singapore map" />
 
       <map name="image-map">
           <area target="_blank" alt="Station 1" title="Station 1" href="https://goo.gl/maps/pwDogjnHGWCmSLDYA" coords="261,380,25" shape="circle" />
