@@ -19,3 +19,7 @@
   width: 650px
   /* width: 100% */
 }
+
+.test {
+  border: solid black 1px
+}

@@ -1,10 +1,13 @@
-import React, { useState, useContext } from "react";
-import { Container, Row, Col } from 'react-bootstrap';
+import React, { useEffect, useState, useContext } from "react";
+// import { Link } from "react-router-dom";
+// import TempRow from "./TempRow"
+
+import { Row, Col } from 'react-bootstrap';
 import './Dashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import LineChart from "./LineChart"
 
 import { DataContext } from './Main'
-import ExtractDownload from "./ExtractDownload"
 
 
 const MONTHS = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
@@ -12,8 +15,8 @@ const DAYS28 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"
 const DAYS29 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29"]
 const DAYS30 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30" ]
 const DAYS31 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" ]
-// const HOURS = ["00","01","02"];
-const HOURS = ["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];
+const HOURS = ["00","01","02"];
+// const HOURS = ["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];
 
 
 function determineDaysInMonth ( year, month ) {
@@ -86,21 +89,12 @@ function Dashboard(props) {
 
     const [tempList, setTempList] = useState([]);
     const [missCount_Temperature, setMissCount_Temperature] = useState(0);
-    const [disableExtract_Temperature, setDisableExtractButton_Temperature] = useState(false);
-    const [disableDownload_Temperature, setDownloadButton_Temperature] = useState(true);
-    const [extractStatus_Temperature, setExtractStatus_Temperature] = useState(false);
-
     const [windspeedList, setWindspeedList] = useState([]);
     const [missCount_Windspeed, setMissCount_Windspeed] = useState(0);
-    const [disableExtract_Windspeed, setDisableExtractButton_Windspeed] = useState(false);
-    const [disableDownload_Windspeed, setDownloadButton_Windspeed] = useState(true);
-    const [extractStatus_Windspeed, setExtractStatus_Windspeed] = useState(false);
-
     const [winddirectionList, setWinddirectionList] = useState([]);
     const [missCount_Winddirection, setMissCount_Winddirection] = useState(0);
-    const [disableExtract_Winddirection, setDisableExtractButton_Winddirection] = useState(false);
-    const [disableDownload_Winddirection, setDownloadButton_Winddirection] = useState(true);
-    const [extractStatus_Winddirection, setExtractStatus_Winddirection] = useState(false);
+
+    // const [csvTemperature, setCsvTemperature] = useState();
 
     const dataContext = useContext(DataContext)
 
@@ -125,15 +119,10 @@ function Dashboard(props) {
 
 
 
-    function extractTemperature () {
+    useEffect(() => {
 
         //========= TEMPERATURE ==========//
         const fetchList_Temperature = [];
-        setExtractStatus_Temperature(true);
-        setDisableExtractButton_Temperature(true);
-
-        setDisableExtractButton_Windspeed(true);
-        setDisableExtractButton_Winddirection(true);
 
         // Push by month
         for ( const month of monthSpan )
@@ -182,40 +171,23 @@ function Dashboard(props) {
             }
             console.log("Missing: " + missing );
             setMissCount_Temperature(missing);
-
-            // setDisableExtractButton_Temperature(true);
-            setDownloadButton_Temperature(false);
-            setExtractStatus_Temperature(false)
-
-            setDisableExtractButton_Windspeed(false);
-            setDisableExtractButton_Winddirection(false);
         })
         .catch((error) => {
             console.log(error);
         });
 
-        // setDisableExtractButton_Temperature(true);
-        // setDownloadButton_Temperature(false);
-      }
-
-
-      function extractWindspeed () {
+        // console.log( "tempList Length? " + tempList.length );
 
         //========= WIND SPEED ==========//
         const fetchList_Windspeed = [];
-        setExtractStatus_Windspeed(true);
-        setDisableExtractButton_Windspeed(true);
 
-        setDisableExtractButton_Temperature(true);
-        setDisableExtractButton_Winddirection(true);
-  
         // Push by month
         for ( const month of monthSpan )
           for ( const day of daysArray )
             for ( const hour of HOURS ) {
                 fetchList_Windspeed.push( fetch(`https://api.data.gov.sg/v1/environment/wind-speed?date_time=${inputYear}-${month}-${day}T${hour}%3A05%3A00`) );
             }
-  
+
         Promise.all(fetchList_Windspeed)
         .then((responses) => {
             return Promise.all(
@@ -226,20 +198,20 @@ function Dashboard(props) {
         })
         .then((data) => {
             console.log( data );
-  
+
             let missing = 0;
             for ( const object of data ) {
               let windspeedArray;
               let windspeedObj;
-  
+
               try{
                 windspeedArray = object.items[0].readings;
                 windspeedObj = windspeedArray.find(element => element.station_id === stationID );
-  
-                // console.log( "time " + object.items[0].timestamp);
-                // console.log( "wind speed " + windspeedObj.value);
+
+                console.log( "time " + object.items[0].timestamp);
+                console.log( "wind speed " + windspeedObj.value);
                 
-  
+
                 const newObj = {  
                     hour: object.items[0].timestamp,
                     value: windspeedObj.value 
@@ -253,151 +225,125 @@ function Dashboard(props) {
             }
             console.log("Missing: " + missing );
             setMissCount_Windspeed(missing);
-  
-            // setDisableExtractButton_Windspeed(true);
-            setDownloadButton_Windspeed(false);
-            setExtractStatus_Windspeed(false)
-
-            setDisableExtractButton_Temperature(false);
-            setDisableExtractButton_Winddirection(false);
         })
         .catch((error) => {
             console.log(error);
         });
-  
-        // setDisableExtractButton_Windspeed(true);
-        // setDownloadButton_Windspeed(false);
-      }
-
-
-      function extractWinddirection () {
-
+        
         //========= WIND DIRECTION ==========//
-        const fetchList_Winddirection = [];
-        setExtractStatus_Winddirection(true);
-        setDisableExtractButton_Winddirection(true);
+        // const fetchList_Winddirection = [];
 
-        setDisableExtractButton_Temperature(true);
-        setDisableExtractButton_Windspeed(true);
+        // // Push by month
+        // for ( const month of monthSpan )
+        //   for ( const day of daysArray )
+        //     for ( const hour of HOURS ) {
+        //         fetchList_Winddirection.push( fetch(`https://api.data.gov.sg/v1/environment/wind-direction?date_time=${inputYear}-${month}-${day}T${hour}%3A05%3A00`) );
+        //     }
 
-        // Push by month
-        for ( const month of monthSpan )
-          for ( const day of daysArray )
-            for ( const hour of HOURS ) {
-                fetchList_Winddirection.push( fetch(`https://api.data.gov.sg/v1/environment/wind-direction?date_time=${inputYear}-${month}-${day}T${hour}%3A05%3A00`) );
-            }
+        // Promise.all(fetchList_Winddirection)
+        // .then((responses) => {
+        //     return Promise.all(
+        //         responses.map((response) => {
+        //             return response.json();
+        //     })
+        //     );
+        // })
+        // .then((data) => {
+        //     console.log( data );
 
-        Promise.all(fetchList_Winddirection)
-        .then((responses) => {
-            return Promise.all(
-                responses.map((response) => {
-                    return response.json();
-            })
-            );
-        })
-        .then((data) => {
-            // console.log( data );
+        //     let missing = 0;
+        //     for ( const object of data ) {
+        //       let winddirectionArray;
+        //       let winddirectionObj;
 
-            let missing = 0;
-            for ( const object of data ) {
-              let winddirectionArray;
-              let winddirectionObj;
+        //       try{
+        //         winddirectionArray = object.items[0].readings;
+        //         winddirectionObj = winddirectionArray.find(element => element.station_id === stationID );
 
-              try{
-                winddirectionArray = object.items[0].readings;
-                winddirectionObj = winddirectionArray.find(element => element.station_id === stationID );
-
-                // console.log( "time " + object.items[0].timestamp);
-                // console.log( "wind direction " + winddirectionObj.value);
+        //         console.log( "time " + object.items[0].timestamp);
+        //         console.log( "wind speed " + winddirectionObj.value);
                 
 
-                const newObj = {  
-                    hour: object.items[0].timestamp,
-                    value: winddirectionObj.value 
-                }
-                setWinddirectionList( winddirectionList =>[...winddirectionList, newObj ] );
-            }
-            catch {
-                console.log( "Missing object");
-                missing += 1;
-            }
-        }
-        console.log("Missing: " + missing );
+        //         const newObj = {  
+        //             hour: object.items[0].timestamp,
+        //             value: winddirectionObj.value 
+        //         }
+        //         setWinddirectionList( winddirectionList =>[...winddirectionList, newObj ] );
+        //       }
+        //       catch {
+        //         console.log( "Missing object");
+        //         missing += 1;
+        //       }
+        //     }
+        //     console.log("Missing: " + missing );
+        //     setMissCount_Winddirection(missing);
+        // })
+        // .catch((error) => {
+        //     console.log(error);
+        // });
 
-            setMissCount_Winddirection(missing);
 
-            // setDisableExtractButton_Winddirection(true);
-            setDownloadButton_Winddirection(false);
-            setExtractStatus_Winddirection(false);
+        // =================================//
 
-            setDisableExtractButton_Temperature(false);
-            setDisableExtractButton_Windspeed(false);
-        })
-        .catch((error) => {
-            console.log(error);
-        });
 
-        // setDisableExtractButton_Winddirection(true);
-        // setDownloadButton_Winddirection(false);
 
-      }
-
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, []);
 
 
 
 
   return (
     <>
-
-    <h1>Historic Weather Readings</h1>
-    <h4>Weather Station ID: {stationID}</h4>
-
-    <Container fluid>
-        <ExtractDownload 
-            extractStatus = {extractStatus_Temperature}
-            missCount = {missCount_Temperature}
-            callExtractDataAPI = {extractTemperature}
-            disableExtractButton = {disableExtract_Temperature}
-            downloadCSV_wParams = {  ()=>downloadCSV(tempList, "Temperature") }
-            disableDownloadButton = {disableDownload_Temperature}
-            dataList = {tempList}
-            dataType={"Temperature"}
-        />
-        <br></br>
-
-        <ExtractDownload 
-            extractStatus = {extractStatus_Windspeed}
-            missCount = {missCount_Windspeed}
-            callExtractDataAPI = {extractWindspeed}
-            disableExtractButton = {disableExtract_Windspeed}
-            downloadCSV_wParams = {  ()=>downloadCSV(windspeedList, "Wind_Speed") }
-            disableDownloadButton = {disableDownload_Windspeed}
-            dataList = {windspeedList}
-            dataType={"Windspeed"}
-        />
-        <br></br>
-
-        <ExtractDownload
-            extractStatus = {extractStatus_Winddirection}
-            missCount = {missCount_Winddirection}
-            callExtractDataAPI = {extractWinddirection}
-            disableExtractButton = {disableExtract_Winddirection}
-            downloadCSV_wParams = {  ()=>downloadCSV(winddirectionList, "Wind_Direction") }
-            disableDownloadButton = {disableDownload_Winddirection}
-            dataList = {winddirectionList}
-            dataType={"Winddirection"}
-        />
+    {/* <h1>Historic Temperature Readings</h1>
+    
+    <table>
+      <tr>
+        <th>Time</th>
+        <th>Temperature value</th>
+      </tr>
+      {tempList}
+    </table> */}
 
 
+    <Row className="app-container">
+        <Col md={6} id='todo_container'>
 
-        <Row >
-            <Col className="test">1 of 3</Col>
-            <Col xs={6} className="test">2 of 3 (wider)</Col>
-            <Col className="test">3 of 3</Col>
-        </Row>
+            <h1>Historic Weather Readings</h1>
 
+            <h4>Weather Station ID: {stationID}</h4>
+            <h4>Number of Missing records for Temperature): {missCount_Temperature}</h4>
+            <h4>Number of Missing records for Wind Speed): {missCount_Windspeed}</h4>
+            <h4>Number of Missing records for Wind Direction): {missCount_Winddirection}</h4>
 
-    </Container>
+            <button onClick={ ()=>downloadCSV(tempList, "Temperature") }>Download Temperature</button>
+            <br></br>
+            <button onClick={ ()=>downloadCSV(windspeedList, "Wind_Speed") }>Download Wind Speed</button>
+            <br></br>
+            <button onClick={ ()=>downloadCSV(winddirectionList, "Wind_Direction") }>Download Wind Direction</button>
+
+        </Col>
+
+        <Col>
+            <div className='chart'>
+                {/* Temperature  */}
+                <LineChart dataList={tempList} type={"temperature"} />
+            </div>
+
+            <br></br>
+
+            <div className='chart'>
+                {/* Wind Speed */}
+                <LineChart dataList={windspeedList} type={"windspeed"} />
+            </div>
+
+            <div className='chart'>
+                {/* Wind Direction */}
+                <LineChart dataList={winddirectionList} type={"winddirection"} />
+            </div>
+        </Col>
+    </Row>
+
   </>
   );
 }
