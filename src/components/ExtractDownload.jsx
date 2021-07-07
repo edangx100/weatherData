@@ -33,7 +33,7 @@ function ExtractDownload (props) {
                         <Card.Text>
                             {props.extractStatus && <h2>Extracting {props.dataType}....</h2>}
                             {/* Number of Missing records for {props.dataType}: {props.missCount}  */}
-                            {props.extractStatus && <p>Number of Missing records for {props.dataType}: {props.missCount}</p> }
+                            {props.missDisplay && <p>Number of Missing records for {props.dataType}: {props.missCount}</p> }
                         </Card.Text>
                         {/* <Button variant="primary">Go somewhere</Button> */}
                         <div>

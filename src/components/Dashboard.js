@@ -111,18 +111,21 @@ function Dashboard(props) {
     const [disableExtract_Temperature, setDisableExtractButton_Temperature] = useState(false);
     const [disableDownload_Temperature, setDownloadButton_Temperature] = useState(true);
     const [extractStatus_Temperature, setExtractStatus_Temperature] = useState(false);
+    const [missDisplay_Temperature, setMissDisplay_Temperature] = useState(false);
 
     const [windspeedList, setWindspeedList] = useState([]);
     const [missCount_Windspeed, setMissCount_Windspeed] = useState(0);
     const [disableExtract_Windspeed, setDisableExtractButton_Windspeed] = useState(false);
     const [disableDownload_Windspeed, setDownloadButton_Windspeed] = useState(true);
     const [extractStatus_Windspeed, setExtractStatus_Windspeed] = useState(false);
+    const [missDisplay_Windspeed, setMissDisplay_Windspeed] = useState(false);
 
     const [winddirectionList, setWinddirectionList] = useState([]);
     const [missCount_Winddirection, setMissCount_Winddirection] = useState(0);
     const [disableExtract_Winddirection, setDisableExtractButton_Winddirection] = useState(false);
     const [disableDownload_Winddirection, setDownloadButton_Winddirection] = useState(true);
     const [extractStatus_Winddirection, setExtractStatus_Winddirection] = useState(false);
+    const [missDisplay_Winddirection, setMissDisplay_Winddirection] = useState(false);
 
     const dataContext = useContext(DataContext)
 
@@ -208,6 +211,7 @@ function Dashboard(props) {
             // setDisableExtractButton_Temperature(true);
             setDownloadButton_Temperature(false);
             setExtractStatus_Temperature(false)
+            setMissDisplay_Temperature(true);
 
             setDisableExtractButton_Windspeed(false);
             setDisableExtractButton_Winddirection(false);
@@ -278,7 +282,8 @@ function Dashboard(props) {
   
             // setDisableExtractButton_Windspeed(true);
             setDownloadButton_Windspeed(false);
-            setExtractStatus_Windspeed(false)
+            setExtractStatus_Windspeed(false);
+            setMissDisplay_Windspeed(true);
 
             setDisableExtractButton_Temperature(false);
             setDisableExtractButton_Winddirection(false);
@@ -351,6 +356,7 @@ function Dashboard(props) {
             // setDisableExtractButton_Winddirection(true);
             setDownloadButton_Winddirection(false);
             setExtractStatus_Winddirection(false);
+            setMissDisplay_Winddirection(true);
 
             setDisableExtractButton_Temperature(false);
             setDisableExtractButton_Windspeed(false);
@@ -383,6 +389,7 @@ function Dashboard(props) {
             disableDownloadButton = {disableDownload_Temperature}
             dataList = {tempList}
             dataType={"Temperature"}
+            missDisplay={missDisplay_Temperature}
         />
         <br></br>
 
@@ -395,6 +402,7 @@ function Dashboard(props) {
             disableDownloadButton = {disableDownload_Windspeed}
             dataList = {windspeedList}
             dataType={"Windspeed"}
+            missDisplay={missDisplay_Windspeed}
         />
         <br></br>
 
@@ -407,6 +415,7 @@ function Dashboard(props) {
             disableDownloadButton = {disableDownload_Winddirection}
             dataList = {winddirectionList}
             dataType={"Winddirection"}
+            missDisplay={missDisplay_Winddirection}
         />
 
 
