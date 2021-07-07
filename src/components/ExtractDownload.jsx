@@ -6,6 +6,7 @@ import LineChart from "./LineChart"
 import './ExtractDownload.css';
 
 
+
 function ExtractDownload (props) {
 
     console.log( "ExtractDownload component" );
@@ -34,6 +35,10 @@ function ExtractDownload (props) {
                             {props.extractStatus && <h2>Extracting {props.dataType}....</h2>}
                             {/* Number of Missing records for {props.dataType}: {props.missCount}  */}
                             {props.missDisplay && <p>Number of Missing records for {props.dataType}: {props.missCount}</p> }
+                            <ol>
+                                { (props.missList).map(ele => <li>{ele}</li>) }
+                            </ol>
+
                         </Card.Text>
                         {/* <Button variant="primary">Go somewhere</Button> */}
                         <div>
