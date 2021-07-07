@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import './Dashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -15,6 +15,28 @@ const DAYS31 = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11"
 // const HOURS = ["00","01","02"];
 const HOURS = ["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"];
 
+
+const monthsMap = {
+    "01": "Jan",
+    "02": "Feb",
+    "03": "Mar",
+    "04": "Apr",
+    "05": "May",
+    "06": "Jun",
+    "07": "Jul",
+    "08": "Aug",
+    "09": "Sep",
+    "10": "Oct",
+    "11": "Nov",
+    "12": "Dec"
+}
+
+const stationMap = {
+    "S44": "S44 (Nanyang Avenue)",
+    "S104": "S104 (Woodlands Avenue 9)",
+    "S24": "S24 (Upper Changi Road North)",
+    "S108": "S108 (Marina Gardens Drive)",
+}
 
 function determineDaysInMonth ( year, month ) {
 
@@ -348,9 +370,8 @@ function Dashboard(props) {
 
   return (
     <>
-
-    <h1>Historic Weather Readings</h1>
-    <h4>Weather Station ID: {stationID}</h4>
+    <h1> {monthsMap[inputMonthStart]} {inputYear} Weather Readings </h1>
+    <h4>Weather Station ID: {stationMap[stationID]}</h4>
 
     <Container fluid>
         <ExtractDownload 
@@ -390,11 +411,11 @@ function Dashboard(props) {
 
 
 
-        <Row >
+        {/* <Row >
             <Col className="test">1 of 3</Col>
             <Col xs={6} className="test">2 of 3 (wider)</Col>
             <Col className="test">3 of 3</Col>
-        </Row>
+        </Row> */}
 
 
     </Container>
