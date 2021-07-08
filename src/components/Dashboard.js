@@ -141,7 +141,6 @@ function Dashboard(props) {
     const inputMonthStart = dataContext.month;
     const inputMonthEnd = dataContext.month;
     
-    // let monthsArray = [];
     let daysArray = [];
     
     const monthSpan = sliceMonthSpan(inputMonthStart, inputMonthEnd);
