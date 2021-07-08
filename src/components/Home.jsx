@@ -1,4 +1,3 @@
-import React from "react";
 import { createGlobalStyle } from 'styled-components'
 import { useHistory } from "react-router-dom";
 import { Button } from 'react-bootstrap';
@@ -35,7 +34,6 @@ function Home() {
   const history = useHistory();
 
   const handleRedirect = () =>{ 
-
     // Redirect
     history.push("/station");
   }
@@ -44,21 +42,20 @@ function Home() {
 
     <>
         <GlobalStyle />
-
         <div className="text">
-          <h6>Under Singapore's Greenplan 2030, there is a nation-wide push for more energy efficient buildings, driving an increase in efforts by data science community to perform energy consumption modelling of buildings in Singapore. Historic weather data available from data.gov.sg is widely used as part of modelling efforts. </h6>
+
+          <h6>Under Singapore's <a href="https://www.greenplan.gov.sg/cos/" target="_blank">Greenplan 2030</a>, there is a whole-of-nation push for more energy efficient buildings, driving an increase in efforts by the data science community to perform energy consumption modelling of buildings in Singapore. Historic weather data from data.gov.sg is widely used as part of these efforts. </h6>
           <br></br>
           <h5> This simple web application is a MVP to help users extract and download historic weather data (at hourly intervals):</h5>
+
           <Button
             variant="info"
-            // disabled={isLoading}
             onClick={handleRedirect} >
               Begin by choosing a Weather Station
           </Button>
+
         </div>
-
     </>
-
   );
 }
 

@@ -1,4 +1,4 @@
-import React, {useState, createContext} from "react";
+import {useState, createContext} from "react";
 import { Route } from "react-router-dom"
 import Station from "./Station"
 import Dashboard from "./Dashboard"
@@ -6,7 +6,9 @@ import Home from "./Home"
 
 export const DataContext = createContext()
 
-function Main(props) {
+
+
+function Main() {
 
   const [station, setStation] = useState();
   const [year, setYear] = useState();
@@ -27,16 +29,12 @@ function Main(props) {
 
       <DataContext.Provider value={prop_object} >
 
-        {/* <Route exact path="/" component={Home} /> */}
         <Route exact path="/">
           <Home />
         </Route>
 
-
         <Route path="/station" component={Station} />
 
-
-        {/* <Route exact path="/weathers" component={Dashboard} /> */}
         <Route path="/weathers">
           <Dashboard />
         </Route>

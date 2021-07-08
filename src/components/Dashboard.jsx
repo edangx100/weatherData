@@ -1,8 +1,6 @@
-import React, { useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { Container } from 'react-bootstrap';
-import './Dashboard.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { DataContext } from './Main'
 import ExtractDownload from "./ExtractDownload"
 
@@ -72,10 +70,10 @@ function selectDaysArray ( daysinMth_param ) {
       return daysArrayToUse;
 }
 
+// used if download multiple months at one go
 function sliceMonthSpan ( monthStart, monthEnd ) {
     return MONTHS.slice( monthStart-1, monthEnd );
 }
-
 
 function downloadCSV (tempList, type) {
 
@@ -103,7 +101,9 @@ function downloadCSV (tempList, type) {
     document.body.removeChild(downloadLink);
 }
 
+
 // ============================================================
+
 function Dashboard(props) {
 
     const [tempList, setTempList] = useState([]);
@@ -112,6 +112,7 @@ function Dashboard(props) {
     const [disableDownload_Temperature, setDownloadButton_Temperature] = useState(true);
     const [extractStatus_Temperature, setExtractStatus_Temperature] = useState(false);
     const [missDisplay_Temperature, setMissDisplay_Temperature] = useState(false);
+    const [missList_Temperature, setMissList_Temperature] = useState([]);
 
     const [windspeedList, setWindspeedList] = useState([]);
     const [missCount_Windspeed, setMissCount_Windspeed] = useState(0);
@@ -119,6 +120,7 @@ function Dashboard(props) {
     const [disableDownload_Windspeed, setDownloadButton_Windspeed] = useState(true);
     const [extractStatus_Windspeed, setExtractStatus_Windspeed] = useState(false);
     const [missDisplay_Windspeed, setMissDisplay_Windspeed] = useState(false);
+    const [missList_Windspeed, setMissList_Windspeed] = useState([]);
 
     const [winddirectionList, setWinddirectionList] = useState([]);
     const [missCount_Winddirection, setMissCount_Winddirection] = useState(0);
@@ -126,19 +128,15 @@ function Dashboard(props) {
     const [disableDownload_Winddirection, setDownloadButton_Winddirection] = useState(true);
     const [extractStatus_Winddirection, setExtractStatus_Winddirection] = useState(false);
     const [missDisplay_Winddirection, setMissDisplay_Winddirection] = useState(false);
+    const [missList_Winddirection, setMissList_Winddirection] = useState([]);
 
     const dataContext = useContext(DataContext)
 
-
-
     const stationID = dataContext.station;  
-
-        
     const inputYear = dataContext.year;
     const inputMonthStart = dataContext.month;
     const inputMonthEnd = dataContext.month;
     
-    // let monthsArray = [];
     let daysArray = [];
     
     const monthSpan = sliceMonthSpan(inputMonthStart, inputMonthEnd);
@@ -154,6 +152,7 @@ function Dashboard(props) {
 
         //========= TEMPERATURE ==========//
         const fetchList_Temperature = [];
+        const timestampList_Temperature = [];
         setExtractStatus_Temperature(true);
         setDisableExtractButton_Temperature(true);
 
@@ -164,9 +163,8 @@ function Dashboard(props) {
         for ( const month of monthSpan )
           for ( const day of daysArray )
             for ( const hour of HOURS ) {
-                // fetchList.push( fetch(`https://api.data.gov.sg/v1/environment/air-temperature?date_time=2020-${month}-${day}T${hour}%3A15%3A00`) );
-                fetchList_Temperature.push( fetch(`https://api.data.gov.sg/v1/environment/air-temperature?date_time=${inputYear}-${month}-${day}T${hour}%3A05%3A00`) );
-                // console.log( `https://api.data.gov.sg/v1/environment/air-temperature?date_time=${inputYear}-${month}-${day}T${hour}%3A15%3A00` )
+                fetchList_Temperature.push( fetch(`https://api.data.gov.sg/v1/environment/air-temperature?date_time=${inputYear}-${month}-${day}T${hour}%3A00%3A00`) );
+                timestampList_Temperature.push( `${inputYear} ${monthsMap[month]}, Day(within month):${day}, Hour:${hour}` );
             }
 
         Promise.all(fetchList_Temperature)
@@ -181,19 +179,16 @@ function Dashboard(props) {
             console.log( data );
 
             let missing = 0;
-            for ( const object of data ) {
-              let temprArray;
-              let temprObj;
+
+            for ( let index=0; index<data.length; index++ ) {
+                const object = data[index];
+                let temprArray;
+                let temprObj;
 
               try{
                 temprArray = object.items[0].readings;
                 temprObj = temprArray.find(element => element.station_id === stationID );
 
-                // console.log( "time " + object.items[0].timestamp);
-                // console.log( "temperature " + temprObj.value);
-                
-
-                // setTempList( tempList =>[...tempList, <TempRow hour={object.items[0].timestamp} temperature={temprObj.value} />] ); 
                 const newObj = {  
                     hour: object.items[0].timestamp,
                     value: temprObj.value 
@@ -203,12 +198,13 @@ function Dashboard(props) {
               catch {
                 console.log( "Missing object");
                 missing += 1;
+                const missingDataTimestamp = timestampList_Temperature[index];
+                setMissList_Temperature( missList_Temperature =>[...missList_Temperature, missingDataTimestamp ] );
               }
             }
             console.log("Missing: " + missing );
             setMissCount_Temperature(missing);
 
-            // setDisableExtractButton_Temperature(true);
             setDownloadButton_Temperature(false);
             setExtractStatus_Temperature(false)
             setMissDisplay_Temperature(true);
@@ -220,8 +216,6 @@ function Dashboard(props) {
             console.log(error);
         });
 
-        // setDisableExtractButton_Temperature(true);
-        // setDownloadButton_Temperature(false);
       }
 
 
@@ -229,6 +223,7 @@ function Dashboard(props) {
 
         //========= WIND SPEED ==========//
         const fetchList_Windspeed = [];
+        const timestampList_Windspeed = [];
         setExtractStatus_Windspeed(true);
         setDisableExtractButton_Windspeed(true);
 
@@ -239,7 +234,8 @@ function Dashboard(props) {
         for ( const month of monthSpan )
           for ( const day of daysArray )
             for ( const hour of HOURS ) {
-                fetchList_Windspeed.push( fetch(`https://api.data.gov.sg/v1/environment/wind-speed?date_time=${inputYear}-${month}-${day}T${hour}%3A05%3A00`) );
+                fetchList_Windspeed.push( fetch(`https://api.data.gov.sg/v1/environment/wind-speed?date_time=${inputYear}-${month}-${day}T${hour}%3A00%3A00`) );
+                timestampList_Windspeed.push( `${inputYear} ${monthsMap[month]}, Day(within month):${day}, Hour:${hour}` );
             }
   
         Promise.all(fetchList_Windspeed)
@@ -254,17 +250,15 @@ function Dashboard(props) {
             console.log( data );
   
             let missing = 0;
-            for ( const object of data ) {
-              let windspeedArray;
-              let windspeedObj;
+
+            for ( let index=0; index<data.length; index++ ) {
+                const object = data[index];
+                let windspeedArray;
+                let windspeedObj;
   
               try{
                 windspeedArray = object.items[0].readings;
                 windspeedObj = windspeedArray.find(element => element.station_id === stationID );
-  
-                // console.log( "time " + object.items[0].timestamp);
-                // console.log( "wind speed " + windspeedObj.value);
-                
   
                 const newObj = {  
                     hour: object.items[0].timestamp,
@@ -275,12 +269,13 @@ function Dashboard(props) {
               catch {
                 console.log( "Missing object");
                 missing += 1;
+                const missingDataTimestamp = timestampList_Windspeed[index];
+                setMissList_Windspeed( missList_Windspeed =>[...missList_Windspeed, missingDataTimestamp ] );
               }
             }
             console.log("Missing: " + missing );
             setMissCount_Windspeed(missing);
   
-            // setDisableExtractButton_Windspeed(true);
             setDownloadButton_Windspeed(false);
             setExtractStatus_Windspeed(false);
             setMissDisplay_Windspeed(true);
@@ -292,8 +287,6 @@ function Dashboard(props) {
             console.log(error);
         });
   
-        // setDisableExtractButton_Windspeed(true);
-        // setDownloadButton_Windspeed(false);
       }
 
 
@@ -301,6 +294,7 @@ function Dashboard(props) {
 
         //========= WIND DIRECTION ==========//
         const fetchList_Winddirection = [];
+        const timestampList_Winddirection = [];
         setExtractStatus_Winddirection(true);
         setDisableExtractButton_Winddirection(true);
 
@@ -311,7 +305,8 @@ function Dashboard(props) {
         for ( const month of monthSpan )
           for ( const day of daysArray )
             for ( const hour of HOURS ) {
-                fetchList_Winddirection.push( fetch(`https://api.data.gov.sg/v1/environment/wind-direction?date_time=${inputYear}-${month}-${day}T${hour}%3A05%3A00`) );
+                fetchList_Winddirection.push( fetch(`https://api.data.gov.sg/v1/environment/wind-direction?date_time=${inputYear}-${month}-${day}T${hour}%3A00%3A00`) );
+                timestampList_Winddirection.push( `${inputYear} ${monthsMap[month]}, Day(within month):${day}, Hour:${hour}` );
             }
 
         Promise.all(fetchList_Winddirection)
@@ -323,20 +318,17 @@ function Dashboard(props) {
             );
         })
         .then((data) => {
-            // console.log( data );
 
             let missing = 0;
-            for ( const object of data ) {
-              let winddirectionArray;
-              let winddirectionObj;
+
+            for ( let index=0; index<data.length; index++ ) {
+                const object = data[index];
+                let winddirectionArray;
+                let winddirectionObj;
 
               try{
                 winddirectionArray = object.items[0].readings;
                 winddirectionObj = winddirectionArray.find(element => element.station_id === stationID );
-
-                // console.log( "time " + object.items[0].timestamp);
-                // console.log( "wind direction " + winddirectionObj.value);
-                
 
                 const newObj = {  
                     hour: object.items[0].timestamp,
@@ -347,13 +339,14 @@ function Dashboard(props) {
             catch {
                 console.log( "Missing object");
                 missing += 1;
+                const missingDataTimestamp = timestampList_Winddirection[index];
+                setMissList_Winddirection( missList_Winddirection =>[...missList_Winddirection, missingDataTimestamp ] );
             }
         }
         console.log("Missing: " + missing );
 
             setMissCount_Winddirection(missing);
 
-            // setDisableExtractButton_Winddirection(true);
             setDownloadButton_Winddirection(false);
             setExtractStatus_Winddirection(false);
             setMissDisplay_Winddirection(true);
@@ -365,12 +358,7 @@ function Dashboard(props) {
             console.log(error);
         });
 
-        // setDisableExtractButton_Winddirection(true);
-        // setDownloadButton_Winddirection(false);
-
       }
-
-
 
 
 
@@ -390,6 +378,7 @@ function Dashboard(props) {
             dataList = {tempList}
             dataType={"Temperature"}
             missDisplay={missDisplay_Temperature}
+            missList = {missList_Temperature}
         />
         <br></br>
 
@@ -403,6 +392,7 @@ function Dashboard(props) {
             dataList = {windspeedList}
             dataType={"Windspeed"}
             missDisplay={missDisplay_Windspeed}
+            missList = {missList_Windspeed}
         />
         <br></br>
 
@@ -416,16 +406,8 @@ function Dashboard(props) {
             dataList = {winddirectionList}
             dataType={"Winddirection"}
             missDisplay={missDisplay_Winddirection}
+            missList = {missList_Winddirection}
         />
-
-
-
-        {/* <Row >
-            <Col className="test">1 of 3</Col>
-            <Col xs={6} className="test">2 of 3 (wider)</Col>
-            <Col className="test">3 of 3</Col>
-        </Row> */}
-
 
     </Container>
   </>
