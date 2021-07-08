@@ -15,7 +15,7 @@ Technologies you used to build this project.
 
 ### Wireframes
 
-Your step by step planning sketch of your project, that you can post them as an image in here.
+![alt text](https://raw.githubusercontent.com/edangx100/weatherData/main/public/components%20implemented.JPG)
 
 ### User Stories
 
