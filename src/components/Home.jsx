@@ -46,7 +46,7 @@ function Home() {
 
           <h6>Under Singapore's <a href="https://www.greenplan.gov.sg/cos/" target="_blank" rel="noreferrer">Greenplan 2030</a>, there is a whole-of-nation push for more energy efficient buildings, driving an increase in efforts by the data science community to perform energy consumption modelling of buildings in Singapore. Historic weather data from data.gov.sg is widely used as part of these efforts. </h6>
           <br></br>
-          <h5> This simple web application is a MVP to help users extract and download historic weather data (at hourly intervals):</h5>
+          <h5> This simple web application is a MVP to help users extract and download historic weather data (at hourly intervals).</h5>
 
           <Button
             variant="info"

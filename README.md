@@ -1,71 +1,51 @@
-# Getting Started with Create React App
+# Your Project Title
+Weather Data Download App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+Under Singapore's Greenplan 2030, there is a whole-of-nation push for more energy efficient buildings, driving an increase in efforts by the data science community to perform energy consumption modelling of buildings in Singapore. Historic weather data from data.gov.sg is widely used as part of these efforts. 
 
-In the project directory, you can run:
+This simple web application is a MVP to help users extract and download historic weather data (at hourly intervals).
 
-### `npm start`
+### Technical Used
+Technologies you used to build this project. 
+- React
+- react-bootstrap
+- react-chartjs-2
+- styled-components
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Wireframes
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+Your step by step planning sketch of your project, that you can post them as an image in here.
 
-### `npm test`
+### User Stories
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Target user: Data Science community
 
-### `npm run build`
+User must be able to:
+- Input choice of: Weather station, Year and Month of data required
+- Extract data
+- Observe that data is successfully extracted by seeing chart successfully plotted
+- Be informed what are the missing data records in dataset from data.gov.sg 
+- Download data
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+---
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Unsolved problems
 
-### `npm run eject`
+There is resource capacity limitation to extract data of one month at one go (~700+ API calls).
+After this problem is resolved, data spanning beyond one month can be extracted. 
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## APIs Used
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+List your APIs used in this project:
+- https://api.data.gov.sg/v1/environment/air-temperature
+- https://api.data.gov.sg/v1/environment/wind-speed
+- https://api.data.gov.sg/v1/environment/wind-direction
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+APIs are used for data extraction
+---
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-# APITest
