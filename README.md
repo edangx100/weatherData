@@ -1,5 +1,4 @@
-# Your Project Title
-Weather Data Download App
+# Weather Data Download App
 
 ## Description
 
