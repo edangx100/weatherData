@@ -2,17 +2,7 @@ import React, {useContext} from "react";
 import { useHistory } from "react-router-dom";
 import { DataContext } from './Main'
 // import 'bootstrap/dist/css/bootstrap.min.css';
-// import styled from 'styled-components'
-import { createGlobalStyle } from 'styled-components'
 
-const GlobalStyle = createGlobalStyle`
-  img {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      /* width: 100%; */
-  }
-`
 
 function Home() {
 
@@ -41,12 +31,11 @@ function Home() {
 
   return (
     <>
-      <GlobalStyle />
-      <h1>Singapore's Weather (Historic) Data</h1>
+      <h1>Home Page</h1>
 
       <h3>Weather stations location</h3>
+      {/* <img src="https://raw.githubusercontent.com/edangx100/APITest/main/public/sg_map_annotated.JPG" alt="singapore map"/> */}
 
- 
       <img src="https://raw.githubusercontent.com/edangx100/APITest/main/public/sg_map_annotatedv2.JPG" usemap="#image-map" alt="singapore map" />
 
       <map name="image-map">
@@ -55,7 +44,6 @@ function Home() {
           <area target="_blank" alt="Station 3" title="Station 3" href="https://goo.gl/maps/15UKd2WNZQKmjRcw8" coords="1045,301,26" shape="circle" />
           <area target="_blank" alt="Station 4" title="Station 4" href="https://goo.gl/maps/JiXwyrVcYD5mtoDw5" coords="731,523,20" shape="circle" />
       </map>
-
       
 
       <h3>Choose what to extract for historic weather data from data.gov.sg</h3>

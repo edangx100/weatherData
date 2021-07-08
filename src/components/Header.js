@@ -14,7 +14,7 @@ function Header() {
 
     <>
     `<Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-      <Navbar.Brand href="/">Singapore's Weather Data</Navbar.Brand>
+      <Navbar.Brand href="/">Home</Navbar.Brand>
       <Navbar.Toggle aria-controls="responsive-navbar-nav" />
       <Navbar.Collapse id="responsive-navbar-nav">
         <Nav className="mr-auto">
