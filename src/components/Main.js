@@ -1,8 +1,8 @@
 import React, {useState, createContext} from "react";
 import { Route } from "react-router-dom"
-import Home from "./Home"
+import Station from "./Station"
 import Dashboard from "./Dashboard"
-import About from "./About"
+import Home from "./Home"
 
 export const DataContext = createContext()
 
@@ -33,7 +33,7 @@ function Main(props) {
         </Route>
 
 
-        <Route path="/about" component={About} />
+        <Route path="/station" component={Station} />
 
 
         {/* <Route exact path="/weathers" component={Dashboard} /> */}

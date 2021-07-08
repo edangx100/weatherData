@@ -169,7 +169,7 @@ function Dashboard(props) {
           for ( const day of daysArray )
             for ( const hour of HOURS ) {
                 // fetchList.push( fetch(`https://api.data.gov.sg/v1/environment/air-temperature?date_time=2020-${month}-${day}T${hour}%3A15%3A00`) );
-                fetchList_Temperature.push( fetch(`https://api.data.gov.sg/v1/environment/air-temperature?date_time=${inputYear}-${month}-${day}T${hour}%3A05%3A00`) );
+                fetchList_Temperature.push( fetch(`https://api.data.gov.sg/v1/environment/air-temperature?date_time=${inputYear}-${month}-${day}T${hour}%3A00%3A00`) );
                 // console.log( `https://api.data.gov.sg/v1/environment/air-temperature?date_time=${inputYear}-${month}-${day}T${hour}%3A15%3A00` )
                 timestampList_Temperature.push( `${inputYear} ${monthsMap[month]}, Day(within month):${day}, Hour:${hour}` );
             }
@@ -250,7 +250,7 @@ function Dashboard(props) {
         for ( const month of monthSpan )
           for ( const day of daysArray )
             for ( const hour of HOURS ) {
-                fetchList_Windspeed.push( fetch(`https://api.data.gov.sg/v1/environment/wind-speed?date_time=${inputYear}-${month}-${day}T${hour}%3A05%3A00`) );
+                fetchList_Windspeed.push( fetch(`https://api.data.gov.sg/v1/environment/wind-speed?date_time=${inputYear}-${month}-${day}T${hour}%3A00%3A00`) );
                 timestampList_Windspeed.push( `${inputYear} ${monthsMap[month]}, Day(within month):${day}, Hour:${hour}` );
             }
   
@@ -328,7 +328,7 @@ function Dashboard(props) {
         for ( const month of monthSpan )
           for ( const day of daysArray )
             for ( const hour of HOURS ) {
-                fetchList_Winddirection.push( fetch(`https://api.data.gov.sg/v1/environment/wind-direction?date_time=${inputYear}-${month}-${day}T${hour}%3A05%3A00`) );
+                fetchList_Winddirection.push( fetch(`https://api.data.gov.sg/v1/environment/wind-direction?date_time=${inputYear}-${month}-${day}T${hour}%3A00%3A00`) );
                 timestampList_Winddirection.push( `${inputYear} ${monthsMap[month]}, Day(within month):${day}, Hour:${hour}` );
             }
 
